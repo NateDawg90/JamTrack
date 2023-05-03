@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from "openai";
-
+import { isValid } from "../../helper/helpers";
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -16,8 +16,7 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || "";
-  if (animal.trim().length === 0) {
+  if (!isValid(req.body)) {
     res.status(400).json({
       error: {
         message: "Please enter acceptable values for all fields..",
@@ -29,9 +28,11 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(req.body),
       temperature: 0.6,
+      max_tokens: 600,
     });
+
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
@@ -49,15 +50,10 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+function generatePrompt(reqBody) {
+  const { eventName, location } = reqBody;
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+  const event = eventName.trim();
+  return `Write content for an email blast that is sent out to attendees of an music festival that will be held 12 months from now. The name of this event is ${event} and the location it will be held in is ${location}
+`;
 }

@@ -54,12 +54,13 @@ export default function Home() {
   async function onSubmit(event) {
     event.preventDefault();
     try {
+      debugger;
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: eventName, location }),
+        body: JSON.stringify({ eventName, location }),
       });
 
       const data = await response.json();
@@ -69,7 +70,7 @@ export default function Home() {
           new Error(`Request failed with status ${response.status}`)
         );
       }
-
+      debugger;
       setResult(data.result);
       setEventName("");
     } catch (error) {
