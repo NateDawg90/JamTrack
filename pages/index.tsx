@@ -41,8 +41,8 @@ const Form = styled.form`
 `;
 
 export default function Home() {
-  const [eventName, setEventName] = useState<string>();
-  const [location, setLocation] = useState<string>();
+  const [eventName, setEventName] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [hotels, setHotels] = useState<string>();
@@ -54,7 +54,6 @@ export default function Home() {
   async function onSubmit(event) {
     event.preventDefault();
     try {
-      debugger;
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -70,7 +69,6 @@ export default function Home() {
           new Error(`Request failed with status ${response.status}`)
         );
       }
-      debugger;
       setResult(data.result);
       setEventName("");
     } catch (error) {

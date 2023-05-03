@@ -54,6 +54,7 @@ function generatePrompt(reqBody) {
   const { eventName, location } = reqBody;
 
   const event = eventName.trim();
-  return `Write content for an email blast that is sent out to attendees of an music festival that will be held 12 months from now. The name of this event is ${event} and the location it will be held in is ${location}
+  return `Write content for a monthly newsletter that is sent out to attendees of an music festival that will be held 12 months from now. The name of this event is ${event} and the location it will be held in is ${location}.
+  What types of polls and surveys could we include in this newsletter?
 `;
 }
