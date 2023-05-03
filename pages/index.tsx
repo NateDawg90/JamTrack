@@ -5,6 +5,8 @@ import FuseLogo from "img/fuse-logo.svg";
 import Image from "next/image";
 import styled from "styled-components";
 
+import TextInput from "components/TextField";
+
 const Button = styled.button`
   background-color: #1b39da;
   border: 1px solid #1b39da;
@@ -15,20 +17,6 @@ const Button = styled.button`
   font-weight: 600;
   padding: 8px 16px;
   transition: all 0.2s ease-in-out;
-`;
-
-const TextField = styled.input`
-  border: 1px solid #000;
-  flex-grow: 1;
-  border-radius: 4px;
-  font-size: 16px;
-  padding: 8px 16px;
-  transition: all 0.2s ease-in-out;
-
-  padding: 12px 16px;
-  border: 1px solid #10a37f;
-  border-radius: 4px;
-  outline-color: #10a37f;
 `;
 
 const Form = styled.form`
@@ -44,7 +32,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [eventName, setEventName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>();
+  const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<string>();
   const [hotels, setHotels] = useState<string>();
   const [months, setMonths] = useState<string>();
@@ -113,28 +101,19 @@ export default function Home() {
           </div>
         )}
         <Form onSubmit={onSubmit}>
-          <div className="d-flex align-items-center justify-content-between mb-4">
-            Event name:
-            <TextField
-              type="text"
-              className="ms-2"
-              name="Event name"
-              placeholder="Enter the event name"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-          </div>
-          <div className="d-flex align-items-center justify-content-between mb-4">
-            Event location:
-            <TextField
-              type="text"
-              className="ms-2"
-              name="Event location"
-              placeholder="Enter the event location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
+          <TextInput
+            label="Event name"
+            placeholder="Enter the event name"
+            value={eventName}
+            setValue={setEventName}
+          />
+          <TextInput
+            label={"Event location"}
+            placeholder={"Enter the event location"}
+            value={location}
+            setValue={setLocation}
+          />
+
           <Button type="submit" value="Generate names">
             Generate{" "}
           </Button>
