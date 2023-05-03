@@ -50,10 +50,11 @@ export default function Home() {
   const [months, setMonths] = useState<string>();
   const [artists, setArtists] = useState<string>();
   const [topics, setTopics] = useState<string>();
-  const [result, setResult] = useState();
+  const [result, setResult] = useState<string>();
 
-  async function onSubmit(event) {
-    event.preventDefault();
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    setResult("");
     setLoading(true);
     try {
       const response = await fetch("/api/generate", {
@@ -64,14 +65,25 @@ export default function Home() {
         body: JSON.stringify({ eventName, location }),
       });
 
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw (
-          data.error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
-      setResult(data.result);
+
+      const data = response.body;
+      if (!data) {
+        return;
+      }
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        setResult((prev) => prev + chunkValue);
+      }
+
       setLoading(false);
     } catch (error) {
       // Consider implementing your own error handling logic here
@@ -79,7 +91,7 @@ export default function Home() {
       alert(error.message);
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
