@@ -41,6 +41,7 @@ const Form = styled.form`
 `;
 
 export default function Home() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [eventName, setEventName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<string>();
@@ -53,6 +54,7 @@ export default function Home() {
 
   async function onSubmit(event) {
     event.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -70,11 +72,12 @@ export default function Home() {
         );
       }
       setResult(data.result);
-      setEventName("");
+      setLoading(false);
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
+      setLoading(false);
     }
   }
 
@@ -90,6 +93,13 @@ export default function Home() {
           <Image src={FuseLogo} width={200} alt="Fuse Logo" />
           <h2 className="text-white ms-4 ">JamTrack</h2>
         </div>
+        {loading && (
+          <div className="d-flex align-items-center justify-content-center">
+            <div className="spinner-border text-light" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
         <Form onSubmit={onSubmit}>
           <div className="d-flex align-items-center justify-content-between mb-4">
             Event name:
