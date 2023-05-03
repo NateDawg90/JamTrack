@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { TextField } from "./text-field.styles";
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
   label: string;
   placeholder: string;
 }
-const TextInput = ({ value, setValue, label, placeholder }) => {
+const TextInput: FC<Props> = ({ value, setValue, label, placeholder }) => {
   return (
     <div className="d-flex align-items-center justify-content-between mb-4">
       {label}:
