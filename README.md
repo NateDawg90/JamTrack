@@ -9,7 +9,7 @@
 3. Navigate into the project directory
 
    ```bash
-   $ cd openai-quickstart-node
+   $ cd jamtrack
    ```
 
 4. Install the requirements
@@ -32,7 +32,7 @@
    $ copy .env.example .env
    ```
 
-6. Add your [API key](https://platform.openai.com/account/api-keys) to the newly created `.env` file
+6. Add your OpenAPI [API key](https://platform.openai.com/account/api-keys) to the newly created `.env` file
 
 7. Run the app
 
@@ -40,4 +40,4 @@
    $ npm run dev
    ```
 
-You should now be able to access the app at [http://localhost:3000](http://localhost:3000)! For the full context behind this example app, check out the [tutorial](https://platform.openai.com/docs/quickstart).
+You should now be able to access the app at [http://localhost:3000](http://localhost:3000)!
