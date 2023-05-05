@@ -15,7 +15,6 @@ const DateField = styled(DatePicker)`
   border: 1px solid #000;
   max-width: 600px;
   width: 100%;
-  /* flex-grow: 1; */
   border-radius: 4px;
   font-size: 16px;
   padding: 8px 16px;
