@@ -1266,6 +1266,13 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
+"@types/date-fns@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@types/date-fns/-/date-fns-2.6.0.tgz#b062ca46562002909be0c63a6467ed173136acc1"
+  integrity sha512-9DSw2ZRzV0Tmpa6PHHJbMcZn79HHus+BBBohcOaDzkK/G3zMjDUDYjJIWBFLbkh+1+/IOS0A59BpQfdr37hASg==
+  dependencies:
+    date-fns "*"
+
 "@types/hoist-non-react-statics@*":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -1484,7 +1491,7 @@ chalk@^2.0.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-classnames@^2.2.6, classnames@^2.3.2:
+classnames@^2.2.3, classnames@^2.2.6, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -1598,7 +1605,7 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-date-fns@^2.0.1, date-fns@^2.24.0:
+date-fns@*, date-fns@^2.0.1, date-fns@^2.24.0, date-fns@^2.30.0:
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
@@ -1664,6 +1671,11 @@ domutils@^3.0.1:
     dom-serializer "^2.0.0"
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
+
+dropdown@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/dropdown/-/dropdown-0.2.0.tgz#d52a9e75ba4cc233c506906ef7e870d50a353f60"
+  integrity sha512-rucNMctxq/MD8hX37pyHhhqYDZ49WRIQOvywlZA2RTicRR/KNyizAQTW9yiJIqUt1mthiCUO/ULXI+eAXvUfjg==
 
 electron-to-chromium@^1.4.284:
   version "1.4.380"
@@ -2075,6 +2087,13 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-dropdown@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/react-dropdown/-/react-dropdown-1.11.0.tgz#b9576de17efd28e5684d101b3f58dfe784af242c"
+  integrity sha512-E2UWetRPxNdIhQahXw6b984ME7WmcgDj9AEAjrtS/oyLCFVo+2qkCfcS06C22JR0Zj+YLnygwv0Ozf6VKKDq7g==
+  dependencies:
+    classnames "^2.2.3"
 
 react-fast-compare@^3.0.1:
   version "3.2.1"

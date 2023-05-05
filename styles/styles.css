@@ -1,3 +1,31 @@
 body {
   background-color: #353740;
 }
+
+.react-datepicker-wrapper {
+  text-align: end;
+}
+
+.Dropdown-root {
+  /* flex-grow: 1; */
+  background-color: white;
+  color: black;
+  width: 100%;
+  max-width: 600px;
+  font-size: 16px;
+  transition: all 0.2s ease-in-out;
+
+  padding: 12px 16px;
+  border: 1px solid #10a37f;
+  border-radius: 4px;
+  outline-color: #10a37f;
+}
+
+.Dropdown-placeholder,
+.Dropdown-option {
+  text-align: left;
+}
+
+/* .Dropdown-placeholder {
+  color: grey;
+} */

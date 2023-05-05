@@ -1,74 +1,67 @@
-import { Configuration, OpenAIApi } from "openai";
+import {
+  ChatCompletionRequestMessageRoleEnum,
+  Configuration,
+  OpenAIApi,
+} from "openai";
 import { isValid } from "../../helper/helpers";
 
-import { OpenAIStream } from "helper/openAIStream";
+import { generatePrompt } from "helper/prompt";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
 const openai = new OpenAIApi(configuration);
 
-export const config = {
-  runtime: "edge",
-};
-export default async (req: Request): Promise<Response> => {
-  const body = (await req.json()) as {
-    eventName: string;
-    location: string;
-  };
+export default async (req, res) => {
+  const body = req.body;
   if (!configuration.apiKey) {
-    return new Response(
-      JSON.stringify({
-        error: {
-          message:
-            "OpenAI API key not configured, please follow instructions in README.md",
-        },
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    res.status(500).json({
+      error: {
+        message:
+          "OpenAI API key not configured, please follow instructions in README.md",
+      },
+    });
   }
+
   if (!isValid(body)) {
-    return new Response(
-      JSON.stringify({
-        error: {
-          message: "Please enter acceptable values for all fields..",
-        },
-      }),
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    res.status(400).json({
+      error: {
+        message: "Please enter acceptable values for all fields..",
+      },
+    });
   }
 
   const payload = {
-    model: "text-davinci-003",
-    prompt: generatePrompt(body),
+    model: "gpt-3.5-turbo",
     temperature: 0.7,
-    max_tokens: 600,
+    max_tokens: 3200,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    stream: true,
     n: 1,
+    messages: [
+      {
+        role: ChatCompletionRequestMessageRoleEnum.System,
+        content: generatePrompt(body),
+      },
+    ],
   };
 
-  const stream = await OpenAIStream(payload);
-  return new Response(stream);
+  try {
+    const completion = await openai.createChatCompletion(payload);
+    res.status(200).json({ result: completion.data.choices[0].message });
+  } catch (error) {
+    if (error.response) {
+      console.error(error.response.status, error.response.data);
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      console.error(`Error with OpenAI API request: ${error.message}`);
+      res.status(500).json({
+        error: {
+          message: "An error occurred during your request.",
+        },
+      });
+    }
+  }
 };
-
-function generatePrompt(reqBody) {
-  const { eventName, location } = reqBody;
-
-  const event = eventName.trim();
-  return `Write content for a monthly newsletter that is sent out to attendees of an music festival that will be held 12 months from now. The name of this event is ${event} and the location it will be held in is ${location}.
-  What types of polls and surveys could we include in this newsletter?
-`;
-}
