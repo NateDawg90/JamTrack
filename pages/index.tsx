@@ -207,7 +207,7 @@ export default function Home() {
         {result && (
           <div className="d-flex flex-column align-items-start">
             <h4 className="mb-3">Email Content:</h4>
-            <div className={styles.result}>{result}</div>
+            <div className="w-100">{result}</div>
           </div>
         )}
       </main>
