@@ -40,12 +40,12 @@ const Button = styled.button`
   font-weight: 600;
   padding: 8px 16px;
   transition: all 0.2s ease-in-out;
-  &:disabled {
-    background-color: #dddddd;
-  }
   &:hover {
     background-color: #4c5ec1;
     border: 1px solid #4c5ec1;
+  }
+  &:disabled {
+    background-color: #dddddd;
   }
 `;
 
