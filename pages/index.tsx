@@ -113,7 +113,7 @@ export default function Home() {
     <div className="p-4">
       <Head>
         <title>JamTrack</title>
-        <link rel="icon" href="/dog.png" />
+        <link rel="icon" href="img/favicon.svg" />
       </Head>
 
       <main className={styles.main}>
