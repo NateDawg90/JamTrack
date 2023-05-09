@@ -16,7 +16,7 @@ const TextInput: FC<Props> = ({
   type = "text",
 }) => {
   return (
-    <div className="d-flex align-items-center justify-content-between mb-3">
+    <div className="d-flex align-items-center justify-content-between mb-2">
       {label}:
       <TextField
         type={type}
