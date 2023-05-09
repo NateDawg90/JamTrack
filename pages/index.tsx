@@ -31,8 +31,8 @@ const Button = styled.button`
   text-align: center;
   max-width: 300px;
   align-self: flex-end;
-  background-color: #1b39da;
-  border: 1px solid #1b39da;
+  background-color: #596ac7;
+  border: 1px solid #596ac7;
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
@@ -42,6 +42,10 @@ const Button = styled.button`
   transition: all 0.2s ease-in-out;
   &:disabled {
     background-color: #dddddd;
+  }
+  &:hover {
+    background-color: #4c5ec1;
+    border: 1px solid #4c5ec1;
   }
 `;
 
@@ -69,6 +73,7 @@ export default function Home() {
     e.preventDefault();
     setResult("");
     setLoading(true);
+
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -86,11 +91,24 @@ export default function Home() {
         }),
       });
 
-      if (response.status !== 200) {
-        throw new Error(`Request failed with status ${response.status}`);
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
-      const data = await response.json();
-      setResult(data.result.content);
+      const data = response.body;
+      if (!data) {
+        return;
+      }
+
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        setResult((prev) => prev + chunkValue);
+      }
       setLoading(false);
     } catch (error) {
       // Consider implementing your own error handling logic here
@@ -101,6 +119,7 @@ export default function Home() {
   };
 
   const isDisabled =
+    loading ||
     !eventName ||
     !location ||
     !startDate ||
@@ -121,14 +140,7 @@ export default function Home() {
           <Image src={FuseLogo} width={200} alt="Fuse Logo" />
           <h2 className="text-white ms-4 ">JamTrack</h2>
         </div>
-        {loading && (
-          <div className="d-flex align-items-center justify-content-center">
-            <div className="spinner-border text-light" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        )}
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={(e) => onSubmit(e)}>
           <TextInput
             label="Event name"
             placeholder="Enter the event name"
@@ -141,16 +153,16 @@ export default function Home() {
             value={location}
             setValue={setLocation}
           />
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <div className="text-nowrap">Start Date:</div>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <div className="text-nowrap">Start date:</div>
             <DateField
               selected={startDate}
               placeholderText="Select a date"
               onChange={(date) => setStartDate(date as Date)}
             />
           </div>
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <div className="text-nowrap">End Date:</div>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <div className="text-nowrap">End date:</div>
             <DateField
               selected={endDate}
               placeholderText="Select a date"
@@ -169,7 +181,7 @@ export default function Home() {
             value={hotels}
             setValue={setHotels}
           />
-          <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="d-flex align-items-center justify-content-between mb-2">
             <div className="text-nowrap">Select a topic:</div>
             <ReactDropdown
               options={TopicOptions.filter(
@@ -182,10 +194,22 @@ export default function Home() {
           </div>
 
           <Button type="submit" disabled={isDisabled} value="Generate names">
-            Generate{" "}
+            Generate Email{" "}
           </Button>
         </Form>
-        <div className={styles.result}>{result}</div>
+        {loading && (
+          <div className="d-flex align-items-center justify-content-center opacity-75">
+            <div className="spinner-border text-light" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        {result && (
+          <div className="d-flex flex-column align-items-start">
+            <h4 className="mb-3">Email Content:</h4>
+            <div className={styles.result}>{result}</div>
+          </div>
+        )}
       </main>
     </div>
   );

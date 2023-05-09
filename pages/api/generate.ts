@@ -1,67 +1,49 @@
-import {
-  ChatCompletionRequestMessageRoleEnum,
-  Configuration,
-  OpenAIApi,
-} from "openai";
 import { isValid } from "../../helper/helpers";
 
 import { generatePrompt } from "helper/prompt";
+import { OpenAIStream, OpenAIStreamPayload } from "helper/openAIStream";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error("Missing env var from OpenAI");
+}
 
-const openai = new OpenAIApi(configuration);
+export const config = {
+  runtime: "edge",
+};
 
-export default async (req, res) => {
-  const body = req.body;
-  if (!configuration.apiKey) {
-    res.status(500).json({
-      error: {
-        message:
-          "OpenAI API key not configured, please follow instructions in README.md",
-      },
-    });
-  }
+export default async (req: Request): Promise<Response> => {
+  const body = (await req.json()) as {
+    eventName: string;
+    location: string;
+    startDate: Date;
+    endDate: Date;
+    hotels: string;
+    artists: string;
+    topic: string;
+  };
 
   if (!isValid(body)) {
-    res.status(400).json({
-      error: {
-        message: "Please enter acceptable values for all fields..",
-      },
+    return new Response("Please enter acceptable values for all fields..", {
+      status: 400,
     });
   }
-
-  const payload = {
+  const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
     temperature: 0.7,
     max_tokens: 3200,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
+    stream: true,
     n: 1,
     messages: [
       {
-        role: ChatCompletionRequestMessageRoleEnum.System,
+        role: "user",
         content: generatePrompt(body),
       },
     ],
   };
 
-  try {
-    const completion = await openai.createChatCompletion(payload);
-    res.status(200).json({ result: completion.data.choices[0].message });
-  } catch (error) {
-    if (error.response) {
-      console.error(error.response.status, error.response.data);
-      res.status(error.response.status).json(error.response.data);
-    } else {
-      console.error(`Error with OpenAI API request: ${error.message}`);
-      res.status(500).json({
-        error: {
-          message: "An error occurred during your request.",
-        },
-      });
-    }
-  }
+  const stream = await OpenAIStream(payload);
+  return new Response(stream);
 };
